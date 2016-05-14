@@ -1,19 +1,19 @@
-import numpy as np
+from numpy import array as Vector
 
 
 class Particle(object):
     def __init__(
             self,
             mass=1.0,
-            position=np.array([0., 0., 0.]),
-            velocity=np.array([0., 0., 0.]),
-            acceleration=np.array([0., 0., 0.])
+            position=Vector([0., 0., 0.]),
+            velocity=Vector([0., 0., 0.]),
+            acceleration=Vector([0., 0., 0.])
     ):
 
         self.mass = mass
 
         # Translational physics
-        self.force = np.array([0., 0., 0.])
+        self.force = Vector([0., 0., 0.])
         self.position = position
         self.velocity = velocity
         self.acceleration = acceleration
