@@ -1,5 +1,5 @@
 from particle import Particle
-import numpy as np
+from numpy import array as Vector
 from pyquaternion import Quaternion
 
 
@@ -8,13 +8,13 @@ class RigidBody(Particle):
     def __init__(
             self,
             mass=1.0,
-            moment_of_inertia=np.array([1., 1., 1.]),
-            position=np.array([0., 0., 0.]),
+            moment_of_inertia=Vector([1., 1., 1.]),
+            position=Vector([0., 0., 0.]),
             orientation=Quaternion(),
-            velocity=np.array([0., 0., 0.]),
-            angular_velocity=np.array([0., 0., 0.]),
-            acceleration=np.array([0., 0., 0.]),
-            angular_acceleration=np.array([0., 0., 0.])
+            velocity=Vector([0., 0., 0.]),
+            angular_velocity=Vector([0., 0., 0.]),
+            acceleration=Vector([0., 0., 0.]),
+            angular_acceleration=Vector([0., 0., 0.])
     ):
         """
 
@@ -35,7 +35,7 @@ class RigidBody(Particle):
         self.moment_of_inertia = moment_of_inertia
 
         # Rotational physics
-        self.torque = np.array([0., 0., 0.])
+        self.torque = Vector([0., 0., 0.])
         self.orientation = orientation
         self.angular_velocity = angular_velocity
         self.angular_acceleration = angular_acceleration
