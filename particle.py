@@ -5,18 +5,18 @@ class Particle(object):
     def __init__(
             self,
             mass=1.0,
-            position=Vector([0., 0., 0.]),
-            velocity=Vector([0., 0., 0.]),
-            acceleration=Vector([0., 0., 0.])
+            position=(0., 0., 0.),
+            velocity=(0., 0., 0.),
+            acceleration=(0., 0., 0.)
     ):
 
         self.mass = mass
 
         # Translational physics
         self.force = Vector([0., 0., 0.])
-        self.position = position
-        self.velocity = velocity
-        self.acceleration = acceleration
+        self.position = Vector(position)
+        self.velocity = Vector(velocity)
+        self.acceleration = Vector(acceleration)
 
     @property
     def momentum(self):
@@ -24,7 +24,7 @@ class Particle(object):
 
     @property
     def kinetic_energy(self):
-        return self.mass * (self.velocity.dot(self.velocity))
+        return self.mass * (self.velocity.dot(self.velocity)) / 2.0
 
     def update(self, time_step):
         # Uses Euler's Method to solve ODE's from initial values.
@@ -33,3 +33,9 @@ class Particle(object):
         self.acceleration = self.force / self.mass
         self.velocity = self.velocity + self.acceleration * time_step
         self.position = self.position + self.velocity * time_step
+
+    def serialise(self):
+        return {
+            'position': list(self.position),
+            'orientation': [1.0, 0.0, 0.0, 0.0]
+        }

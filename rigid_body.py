@@ -1,5 +1,5 @@
-from particle import Particle
 from numpy import array as Vector
+from particle import Particle
 from pyquaternion import Quaternion
 
 
@@ -8,13 +8,13 @@ class RigidBody(Particle):
     def __init__(
             self,
             mass=1.0,
-            moment_of_inertia=Vector([1., 1., 1.]),
-            position=Vector([0., 0., 0.]),
-            orientation=Quaternion(),
-            velocity=Vector([0., 0., 0.]),
-            angular_velocity=Vector([0., 0., 0.]),
-            acceleration=Vector([0., 0., 0.]),
-            angular_acceleration=Vector([0., 0., 0.])
+            moment_of_inertia=(1., 1., 1.),
+            position=(0., 0., 0.),
+            orientation=(1.0, 0.0, 0.0, 0.0),
+            velocity=(0., 0., 0.),
+            angular_velocity=(0., 0., 0.),
+            acceleration=(0., 0., 0.),
+            angular_acceleration=(0., 0., 0.)
     ):
         """
 
@@ -32,13 +32,13 @@ class RigidBody(Particle):
         """
         super().__init__(mass, position, velocity, acceleration)
 
-        self.moment_of_inertia = moment_of_inertia
+        self.moment_of_inertia = Vector(moment_of_inertia)
 
         # Rotational physics
         self.torque = Vector([0., 0., 0.])
-        self.orientation = orientation
-        self.angular_velocity = angular_velocity
-        self.angular_acceleration = angular_acceleration
+        self.orientation = Quaternion(orientation)
+        self.angular_velocity = Vector(angular_velocity)
+        self.angular_acceleration = Vector(angular_acceleration)
 
     def update(self, time_step):
         super().update(time_step)
@@ -49,3 +49,9 @@ class RigidBody(Particle):
         self.angular_acceleration = self.torque / self.moment_of_inertia
         self.angular_velocity = self.angular_velocity + self.angular_acceleration * time_step
         self.orientation.integrate(self.angular_velocity, time_step)
+
+    def serialise(self):
+        return {
+            'position': list(self.position),
+            'orientation': list(self.orientation)
+        }
