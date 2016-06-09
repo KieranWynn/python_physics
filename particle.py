@@ -26,6 +26,12 @@ class Particle(object):
     def kinetic_energy(self):
         return self.mass * (self.velocity.dot(self.velocity)) / 2.0
 
+    def apply_force(self, force):
+        self.force = Vector(force)
+
+    def add_force(self, force):
+        self.force += Vector(force)
+
     def update(self, time_step):
         # Uses Euler's Method to solve ODE's from initial values.
         if self.mass == 0.0:

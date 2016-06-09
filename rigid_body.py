@@ -40,6 +40,20 @@ class RigidBody(Particle):
         self.angular_velocity = Vector(angular_velocity)
         self.angular_acceleration = Vector(angular_acceleration)
 
+    def apply_force_at_point(self, force, application_point=None):
+        if application_point is not None:
+            # apply torque
+            pass
+        super().apply_force(force)
+
+
+    def add_force_at_point(self, force, application_point=None):
+        if application_point is not None:
+            # add torque
+            pass
+        super().add_force(force)
+
+
     def update(self, time_step):
         super().update(time_step)
 
