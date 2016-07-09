@@ -1,4 +1,4 @@
-from rigid_body import RigidBody
+import core.object_primitives as primitives
 from numpy import array as Vector
 from numpy import linalg
 import math
@@ -10,27 +10,27 @@ class Simulation(object):
 
     def __init__(self):
         self.elements = {
-            1: RigidBody(
+            1: primitives.RigidBody(
                 position=(1, 0.0, 0.0),
                 angular_velocity=(0, 0.2, 0.5)
             ),
-            2: RigidBody(
+            2: primitives.RigidBody(
                 position=(0.0, 5.0, 0),
                 angular_velocity=(0.0, 0.0, 2.5)
             ),
-            3: RigidBody(
+            3: primitives.RigidBody(
                 position=(0.0, 0.0, 1),
                 angular_velocity=(1.0, 1.5, 0.0)
             ),
-            4: RigidBody(
+            4: primitives.RigidBody(
                 position=(4.0, 0.0, 0),
                 angular_velocity=(0.0, 0.0, 5)
             ),
-            5: RigidBody(
+            5: primitives.RigidBody(
                 position=(10.0, 0.0, 0),
                 angular_velocity=(0.0, 0.5, -7.5)
             ),
-            6: RigidBody(
+            6: primitives.RigidBody(
                 position=(3.0, 0.0, 0),
                 angular_velocity=(2.0, 0.0, 0.0)
             ),

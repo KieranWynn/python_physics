@@ -1,6 +1,7 @@
 import json
-from simulation import Simulation
-from web_socket_visualiser import VisualiserServer
+
+from source.simulation import Simulation
+from source.web_socket_visualiser import VisualiserServer
 
 
 class SimulationVisualiser(object):
