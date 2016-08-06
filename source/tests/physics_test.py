@@ -1,8 +1,7 @@
 import unittest
 import numpy as np
 from core import object_primitives
-from core import geometry
-from core import structure
+import core.reference_frame as reference_frame
 
 class PhysicsTest(unittest.TestCase):
 
@@ -22,8 +21,13 @@ class PhysicsTest(unittest.TestCase):
         self.assertTrue((particle_a.velocity.in_frame(inertial.frame) == np.array((1, 1, 0))).all())
 
     def test_in_parent_frame(self):
-        node_a = object_primitives.PhysicsPrimitive()
-        frame_a = geometry.ReferenceFrame(node=structure.Node)
-        a = geometry.FramedPoint()
+        frame_a = reference_frame.ReferenceFrame.get_base()
+        frame_b = reference_frame.ReferenceFrame(position=(2, 0, 0))
+        frame_a.add(frame_b)
+        point_b = reference_frame.FramedPoint([1, 1, 0], frame=frame_b)
+        point_a = point_b.in_parent_frame()
+        self.assertEqual(point_a, reference_frame.FramedPoint((1, 1, 2), frame=frame_a))
+
+
 
 

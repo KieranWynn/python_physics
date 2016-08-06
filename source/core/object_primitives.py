@@ -51,7 +51,8 @@ class Particle(PhysicsPrimitive):
 
     @mass.setter
     def mass(self, value):
-        assert(value > 0.0, "An object's mass cannot be less than or equal to zero")
+        if value <= 0.0:
+            raise ZeroDivisionError("An object's mass cannot be less than or equal to zero")
         self._mass = value
 
     @property
@@ -160,10 +161,8 @@ class RigidBody(Particle):
     @moment_of_inertia.setter
     def moment_of_inertia(self, value):
         self._moment_of_inertia = geometry.FramedVector.convert_to_frame(value, self.frame)
-        assert(
-            bool(self.moment_of_inertia.dot(self.moment_of_inertia)),
-            "Mass moment of inertia cannot have zero magnitude"
-        )
+        if not bool(self.moment_of_inertia.dot(self.moment_of_inertia)):
+            raise ZeroDivisionError("Mass moment of inertia cannot have zero magnitude")
 
     @property
     def torque(self):
