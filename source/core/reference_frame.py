@@ -119,6 +119,9 @@ class ReferenceFrame(ReferenceFrameNode):
         self._angular_acceleration = FramedVector.convert_to_frame(value, self.parent)
 
 class FramedGeometry(object):
+    def __init__(self, frame=None):
+        self.frame = frame or ReferenceFrame.get_base()
+
     def in_parent_frame(self):
         raise NotImplementedError
 
@@ -140,16 +143,17 @@ class FramedGeometry(object):
         return instance  # TODO cls(instance, frame=frame)
 
 
-class FramedArray(np.ndarray):
+class FramedArray(np.ndarray, FramedGeometry):
 
     def __new__(cls, input_array, frame=None):
         """
         :param frame: Frame in which this geometry is defined (defaults to global base frame)
         :type frame: core.reference_frame.ReferenceFrame or None
         """
-        obj = np.asarray(input_array).view(cls)
-        obj.frame = frame or ReferenceFrame.get_base()
-        return obj
+        return np.asarray(input_array).view(cls)
+
+    def __init__(self, input_array, frame=None):
+        FramedGeometry.__init__(self, frame)
 
     def __array_finalize__(self, obj):
         if obj is None: return
@@ -191,9 +195,9 @@ class FramedVector(FramedArray):
         pass
 
 
-class FramedQuaternion(Quaternion):
+class FramedQuaternion(Quaternion, FramedGeometry):
     def __init__(self, *args, **kwargs):
-        self.frame = kwargs.pop('frame', None)
+        FramedGeometry.__init__(self, kwargs.pop('frame', None))
         super().__init__(*args, **kwargs)
 
     def relative_to(self, node):
