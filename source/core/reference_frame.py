@@ -15,7 +15,7 @@ class ReferenceFrameNode(object):
         if not cls._base:
             cls._base = cls.__new__(cls)
             cls._base._parent = None
-            cls._base.__init__(cls._base)
+            cls._base.__init__()
         return cls._base
 
     @property
@@ -57,12 +57,12 @@ class ReferenceFrame(ReferenceFrameNode):
             angular_acceleration=(0., 0., 0.),
     ):
         super().__init__()
-        self.position = position,
-        self.orientation = orientation,
-        self.velocity = velocity,
-        self.angular_velocity = angular_velocity,
-        self.acceleration = acceleration,
-        self.angular_acceleration = angular_acceleration,
+        self.position = position
+        self.orientation = orientation
+        self.velocity = velocity
+        self.angular_velocity = angular_velocity
+        self.acceleration = acceleration
+        self.angular_acceleration = angular_acceleration
 
     @property
     def position(self):
@@ -118,6 +118,7 @@ class ReferenceFrame(ReferenceFrameNode):
     def angular_acceleration(self, value):
         self._angular_acceleration = FramedVector.convert_to_frame(value, self.parent)
 
+
 class FramedGeometry(object):
     def __init__(self, frame=None):
         self.frame = frame or ReferenceFrame.get_base()
@@ -139,17 +140,14 @@ class FramedGeometry(object):
             else:
                 instance = instance.in_frame(frame)
         except AttributeError:
-            pass
-        return instance  # TODO cls(instance, frame=frame)
+            instance = cls(instance, frame=frame)
+        return instance
 
 
 class FramedArray(np.ndarray, FramedGeometry):
 
     def __new__(cls, input_array, frame=None):
-        """
-        :param frame: Frame in which this geometry is defined (defaults to global base frame)
-        :type frame: core.reference_frame.ReferenceFrame or None
-        """
+        # np.ndarray implements __new__ (so it can return a view)
         return np.asarray(input_array).view(cls)
 
     def __init__(self, input_array, frame=None):
@@ -162,8 +160,6 @@ class FramedArray(np.ndarray, FramedGeometry):
     def __array_wrap__(self, out_arr, context=None):
         # just call the parent
         return np.ndarray.__array_wrap__(self, out_arr, context)
-
-
 
 
 class FramedPoint(FramedArray):
